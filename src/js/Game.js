@@ -7,6 +7,7 @@ import blueImage from '../static/blue.png';
 import greenImage from '../static/green.png';
 import purpleImage from '../static/purple.png';
 import plateImage from '../static/plate.png';
+import progressBarImage from '../static/progressBar.png';
 
 export default class Game {
     constructor() {
@@ -15,6 +16,18 @@ export default class Game {
         this.height = height;
         this.rows = 3;
         this.cols = 5;
+        this.crystalTypes = ['yellow', 'red', 'blue', 'green', 'purple'];
+        this.crystalsArray = [];
+        // Инициализация объекта для отслеживания прогресса
+        this.progress = {
+            yellow: 0,
+            red: 0,
+            blue: 0,
+            green: 0,
+            purple: 0
+        };
+        this.crystalSprites = [];
+        this.plateSprites = []
         this.app = new Application();
         this.addCanvas();
         this.loadBackground(); // Загружаем фон
@@ -60,7 +73,8 @@ export default class Game {
                 Assets.load(blueImage),
                 Assets.load(greenImage),
                 Assets.load(purpleImage),
-                Assets.load(plateImage)
+                Assets.load(plateImage),
+                Assets.load(progressBarImage),
             ]);
             this.crystals = {
                 yellow: textures[0],
@@ -70,8 +84,9 @@ export default class Game {
                 purple: textures[4],
                 plate: textures[5]
             };
+            this.progressBar = textures[6];
 
-            console.log(this.crystals);
+            // console.log(this.crystals);
             this.createGrid();
         } catch (error) {
             console.error('Error loading assets:', error);
@@ -104,19 +119,20 @@ export default class Game {
         }
 
         // Создаем массив кристаллов с 3 каждого типа
-        const crystalTypes = ['yellow', 'red', 'blue', 'green', 'purple'];
-        const crystalsArray = [];
-        crystalTypes.forEach(type => {
+        // const crystalTypes = ['yellow', 'red', 'blue', 'green', 'purple'];
+        // const crystalsArray = [];
+        this.crystalTypes.forEach(type => {
             for (let i = 0; i < 3; i++) {
-                crystalsArray.push(type);
+                this.crystalsArray.push(type);
             }
         });
 
         // Перемешиваем массив кристаллов
-        this.shuffleArray(crystalsArray);
+        this.shuffleArray(this.crystalsArray);
 
         // Размещаем кристаллы на сцене
-        this.placeCrystals(positions, crystalsArray);
+        this.placeCrystals(positions, this.crystalsArray);
+        this.placeProgressBars();
     }
 
     // Функция для перемешивания массива
@@ -137,8 +153,15 @@ export default class Game {
             plateSprite.y = position.y;
             plateSprite.width = 0.095 * this.app.screen.width;
             plateSprite.height = 0.095 * this.app.screen.width;
-            // plateSprite.anchor.set(0.5); // Центрируем спрайт
-            // plateSprite.visible = false;
+            plateSprite.interactive = true; // Делаем плитку интерактивной
+            plateSprite.buttonMode = true;
+
+            // Обработчик клика
+            plateSprite.on('pointerdown', () => {
+                console.log('click ' + index)
+                this.openCrystal(index, crystalsArray);
+            });
+            this.plateSprites.push(plateSprite);
             this.app.stage.addChild(plateSprite);
 
             // Создаем спрайт кристалла, который будет под plate
@@ -149,8 +172,24 @@ export default class Game {
             crystalSprite.height = 0.095 * this.app.screen.width;
             // crystalSprite.anchor.set(0.5);
             crystalSprite.visible = false; // Скрываем кристалл под plate
+            this.crystalSprites.push(crystalSprite);
             this.app.stage.addChild(crystalSprite);
         });
+    }
+
+    // Функция для открытия кристалла
+    openCrystal(index, crystalsArray) {
+        // const crystalsArray = ['yellow', 'red', 'blue', 'green', 'purple'];
+        const crystalType = crystalsArray[index]; // Получаем тип кристалла по индексу
+        const crystalSprite = this.crystalSprites[index]; // Предполагаем, что кристалл сразу за плиткой
+        const plateSprite = this.plateSprites[index];
+        // Показать кристалл с анимацией
+        crystalSprite.visible = true;
+        plateSprite.visible = false;
+
+        // Увеличиваем прогресс
+        this.progress[crystalType]++;
+        console.log(`${crystalType} Progress:`, this.progress[crystalType]);
     }
 
     placeProgressBars() {
@@ -161,15 +200,23 @@ export default class Game {
         const marginW = 0.119 * width;
         const barWidth = 0.145 * width;
         const barHeight = 0.0566 * width;
-        for (let row = 0; row < this.rows; row++) {
-            const barSprite = new Sprite();
-            barSprite.x = marginW + row * (padding + barWidth);
+        const marginCrystal = 0.0206 * width;
+        const crystalsArray = ['yellow', 'red', 'blue', 'green', 'purple'];
+        for (let col = 0; col < this.cols; col++) {
+            const barSprite = new Sprite(this.progressBar);
+            barSprite.x = marginW + col * (padding + barWidth);
             barSprite.y = marginH;
             barSprite.width = barWidth;
             barSprite.height = barHeight;
-            // plateSprite.anchor.set(0.5); // Центрируем спрайт
-            // plateSprite.visible = false;
+            const barCrystalSprite = new Sprite(this.crystals[crystalsArray[col]]);
+            barCrystalSprite.x = marginW + 0.5* marginCrystal + col * (padding + barWidth);
+            barCrystalSprite.y = marginH + marginCrystal;
+            barCrystalSprite.width = 0.0326 * width;
+            barCrystalSprite.height = 0.0326 * width;
+            // barCrystalSprite.anchor.set(0.5); // Центрируем спрайт
+            // barSprite.visible = false;
             this.app.stage.addChild(barSprite);
+            this.app.stage.addChild(barCrystalSprite);
         }
     }
 }
