@@ -86,10 +86,9 @@ export default class ProgressBars {
             sprite.width = this.miniSize.width;
             sprite.height = this.miniSize.height;
             sprite.visible = false;
-
             this.minisprites.push(sprite);
             this.app.stage.addChild(sprite);
-        })
+        });
     }
 
     // Метод для обновления видимости миникристаллов
@@ -103,7 +102,6 @@ export default class ProgressBars {
             } else {
                 sprite.visible = false;
             }
-            
         });
     }
 

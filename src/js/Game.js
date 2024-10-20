@@ -107,6 +107,7 @@ export default class Game {
         background.width = this.app.screen.width;
         background.height = this.app.screen.height;
         this.width = this.app.screen.width;
+        this.progressBars.updateMiniCrystals(this.progress);
     }
 
     placeRestartButton(){
