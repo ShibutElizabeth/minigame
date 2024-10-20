@@ -6,3 +6,5 @@ export const crystalPaths = {
     purple: '../static/purple.png',
     plate: '../static/plate.png'
 }
+
+export const crystalTypes = ['purple', 'green', 'blue', 'red', 'yellow'];
