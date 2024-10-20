@@ -113,7 +113,7 @@ export default class Grid {
         plateSprite.height = this.cellSize;
         plateSprite.interactive = true;
         plateSprite.buttonMode = true;
-        plateSprite.on('pointerdown', () => this.openCrystal(index));
+        plateSprite.on('pointerdown', (event) => this.openCrystal(event.global, index));
         return plateSprite;
     }
 
@@ -128,7 +128,7 @@ export default class Grid {
     }
 
     // Handle opening crystal on plate click
-    openCrystal(index) {
+    openCrystal(event, index) {
         const crystalType = this.crystalsArray[index];
         const crystalSprite = this.crystalSprites[index];
         const plateSprite = this.plateSprites[index];
@@ -136,9 +136,17 @@ export default class Grid {
         crystalSprite.visible = true; // Show crystal
         plateSprite.visible = false; // Hide plate
 
+        const { x, y } = event; // Позиция клика
+
+        
+        const mouse = {
+            x: event.x,
+            y: event.y
+        }
+        console.log(mouse)
         // Update progress
         this.game.progress[crystalType]++;
-        this.game.checkProgress();
+        this.game.checkProgress(mouse);
     }
 
     // Удаление старых спрайтов с экрана

@@ -36,12 +36,12 @@ export default class Game {
     }
 
     // Метод для проверки прогресса
-    checkProgress() {
-        this.progressBars.updateMiniCrystals(this.progress);
+    checkProgress(mouse) {
+        console.log(mouse)
+        this.progressBars.updateMiniCrystals(this.progress, mouse);
         for (const key in this.progress) {
             if (this.progress[key] >= 3) {
                 console.log(`Все ${key} кристаллы открыты! Перезапуск игры...`);
-                // this.restartGame();
                 const winImg = document.querySelector('.popup__image');
                 winImg.style.backgroundImage = `url(../../${key}.png)`
                 this.popup.style.display = 'flex';
