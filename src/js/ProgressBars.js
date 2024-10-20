@@ -31,19 +31,19 @@ export default class ProgressBars {
 
     // Рассчитываем отступы и размеры элементов
     calculateSizes(width) {
-        this.barMargin = { top: 0.012 * width, left: 0.077 * width };
+        this.barMargin = { top: 0.012 * width, left: 0.12 * width };
         this.barSize = { width: 0.154 * width, height: 0.0668 * width };
         this.miniMargin = {
-            left: 0.15 * this.width,
-            top: 0.0154 * this.width
+            left: 0.1935 * this.width,
+            top: 0.01585 * this.width
         };
         this.miniPadding = {
-            left: 0.0075 * this.width,
-            between: 0.174 * this.width
+            left: 0.00945 * this.width,
+            between: 0.154 * this.width
         };
         this.miniSize = {
-            width: 0.0137 * this.width,
-            height: 0.0145 * this.width
+            width: 0.012 * this.width,
+            height: 0.012 * this.width
         }
     }
 
@@ -55,7 +55,7 @@ export default class ProgressBars {
         // Размещаем новые спрайты
         for (let col = 0; col < this.columns; col++) {
             const barSprite = new Sprite(this.textures[crystalTypes[col]]);
-            barSprite.x = this.barMargin.left + col * (this.barSize.width + 0.02 * this.width); // Добавим небольшой отступ между столбцами
+            barSprite.x = this.barMargin.left + col * (this.barSize.width); // Добавим небольшой отступ между столбцами
             barSprite.y = this.barMargin.top;
             barSprite.width = this.barSize.width;
             barSprite.height = this.barSize.height;
@@ -79,7 +79,7 @@ export default class ProgressBars {
             }
         }
 
-        positions.forEach((el) => {
+        positions.forEach((el, i) => {
             const sprite = new Sprite(this.minicrystals[crystalTypes[el.type]]);
             sprite.x = el.x;
             sprite.y = el.y;
