@@ -1,4 +1,5 @@
 body{
+    position: relative;
     margin: 0;
     padding: 0;
     width: 100vw;
@@ -8,4 +9,51 @@ body{
 canvas{
     width: 100%;
     height: 100%;
+}
+
+.restart_button{
+    position: absolute;
+    left: 83.68vw;
+    top: 38.8vw;
+    width: 14.7vw;
+    height: 5.64vw;
+    cursor: pointer;
+
+    &:hover{
+        filter: brightness(1.2);
+    }
+}
+
+.popup{
+    position: fixed;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.2vw;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(1, 1, 1, 0.8);
+    z-index: 10;
+}
+
+.popup__text{
+    color: yellow;
+    font-size: 50px;
+    margin: 0;
+}
+
+.popup__image{
+    background-image: url(./static/blue.png);
+    background-size: cover;
+    width: 9.74vw;
+    height: 9.74vw;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+}
+
+.popup__button{
+    position: relative;
+    left: auto;
+    top: auto;
 }
