@@ -1,4 +1,5 @@
 import { Sprite } from 'pixi.js';
+import gsap from 'gsap';
 import Loader from './Loader';
 import { crystalTypes } from './constants'; // Предположим, что crystalTypes хранит массив ['yellow', 'red', 'blue', 'green', 'purple']
 
@@ -11,6 +12,7 @@ export default class ProgressBars {
         this.loader = new Loader();
         this.textures = null;
         this.minicrystals = null;
+        this.positions = [];
 
         this.sprites = []; // Список для хранения спрайтов прогресс-баров
         this.minisprites = [];
@@ -67,11 +69,11 @@ export default class ProgressBars {
     }
 
     placeMinicrystals(){
-        const positions = [];
+        
 
         for(let type = 0; type < this.columns; type++){
             for(let c = 0; c < 3; c++){
-                positions.push({
+                this.positions.push({
                     x: this.miniMargin.left + c * (this.miniPadding.left + this.miniSize.width) + type * this.miniPadding.between,
                     y: this.miniMargin.top,
                     type: type
@@ -79,7 +81,7 @@ export default class ProgressBars {
             }
         }
 
-        positions.forEach((el, i) => {
+        this.positions.forEach((el, i) => {
             const sprite = new Sprite(this.minicrystals[crystalTypes[el.type]]);
             sprite.x = el.x;
             sprite.y = el.y;
@@ -92,13 +94,22 @@ export default class ProgressBars {
     }
 
     // Метод для обновления видимости миникристаллов
-    updateMiniCrystals(progress) {
+    updateMiniCrystals(progress, mouse) {
         this.minisprites.forEach((sprite, index) => {
             if(progress){
                 const crystalType = crystalTypes[Math.floor(index / 3)]; // Определяем тип кристалла
                 const crystalProgress = progress[crystalType];
+                if(crystalProgress > (index % 3)){
+                    // Вычисляем целевую позицию миникристалла в прогресс-баре
+                    const targetX = this.positions[index].x;
+                    const targetY = this.positions[index].y;
+                    
+                    // Запускаем анимацию
+                    this.animateMiniCrystal(mouse.x, mouse.y, targetX, targetY, crystalType);
+                }
+                
                 // Делаем миникристалл видимым, если прогресс >= позиции кристалла (например, для первого миникристалла прогресс >= 1)
-                sprite.visible = crystalProgress > (index % 3);
+                // sprite.visible = crystalProgress > (index % 3);
             } else {
                 sprite.visible = false;
             }
@@ -111,6 +122,36 @@ export default class ProgressBars {
         this.minisprites.forEach(sprite => this.app.stage.removeChild(sprite));
         this.sprites = [];
         this.minisprites = [];
+    }
+
+    animateMiniCrystal(startX, startY, targetX, targetY, crystalType) {
+        // Создаем спрайт миникристалла на позиции клика
+        const miniCrystal = new Sprite(this.minicrystals[crystalType]);
+        miniCrystal.x = startX;
+        miniCrystal.y = startY;
+        miniCrystal.width = this.miniSize.width;
+        miniCrystal.height = this.miniSize.height;
+
+        console.log('animate')
+        // Добавляем миникристалл на сцену
+        this.app.stage.addChild(miniCrystal);
+
+        // Анимация перемещения от позиции клика до позиции в прогресс-баре
+        gsap.to(miniCrystal, {
+            x: targetX,
+            y: targetY,
+            duration: 1, // Длительность анимации в секундах
+            onComplete: () => {
+                // Удаляем миникристалл после завершения анимации
+                this.app.stage.removeChild(miniCrystal);
+
+                // Делаем целевой миникристалл в прогресс-баре видимым
+                const targetMiniSprite = this.minisprites.find(sprite => sprite.x === targetX && sprite.y === targetY);
+                if (targetMiniSprite) {
+                    targetMiniSprite.visible = true;
+                }
+            }
+        });
     }
 
     // Пересчитываем позиции и размеры на изменение окна
