@@ -32,7 +32,7 @@ export default class Grid {
 
     // Calculate margin, padding, and cell sizes based on screen width
     calculateSizes(width) {
-        this.margin = { top: 0.0866 * width, left: 0.1575 * width };
+        this.margin = { top: 0.0956 * width, left: 0.169 * width };
         this.padding = { top: 0.0282 * width, left: 0.044 * width };
         this.cellSize = 0.0974 * width;
     }

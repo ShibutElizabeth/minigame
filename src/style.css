@@ -4,6 +4,7 @@ body{
     padding: 0;
     width: 100vw;
     height: 100vh;
+    overflow: hidden;
 }
 
 canvas{
@@ -18,9 +19,13 @@ canvas{
     width: 14.7vw;
     height: 5.64vw;
     cursor: pointer;
+    /* display: none; */
 
     &:hover{
         filter: brightness(1.2);
+    }
+    &:active{
+        filter: brightness(0.8);
     }
 }
 
