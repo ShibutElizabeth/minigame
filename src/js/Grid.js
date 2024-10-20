@@ -3,31 +3,30 @@ import Loader from './Loader';
 import { crystalTypes } from "./constants";
 
 export default class Grid {
-    constructor(app) {
+    constructor(app, game) {
         this.app = app;
         this.columns = 5;
         this.rows = 3;
-        
-        console.log(this.app)
         this.width = this.app.screen.width;
         
         this.calculateSizes(this.width);
-        this.crystalsArray = this.generateCrystalsArray(); // Generate crystal array on init
+        this.crystalsArray = [];
         this.crystalSprites = [];
         this.plateSprites = [];
-        this.positions = this.calculatePositions();
+        this.positions = [];
+        this.game = game;
+        this.restart();
 
         this.loader = new Loader();
-        this.crystals = null;
-        this.progress = this.initializeProgress(); // Initialize progress for each crystal type
-
+        this.textures = null;
+        
         window.addEventListener('resize', this.onResize.bind(this));
     }
 
     // Asynchronously load crystal textures
-    async loadCrystalTextures() {
-        if(!this.crystals){
-            this.crystals = await this.loader.loadCrystals();
+    async loadTextures() {
+        if(!this.textures){
+            this.textures = await this.loader.loadCrystals();
         }
     }
 
@@ -90,11 +89,6 @@ export default class Grid {
         return array;
     }
 
-    // Initialize progress for each crystal type
-    initializeProgress() {
-        return crystalTypes.reduce((acc, type) => ({ ...acc, [type]: 0 }), {});
-    }
-
     // Place crystals and plates on the stage
     placeCells() {
         this.clearSprites();
@@ -113,7 +107,7 @@ export default class Grid {
 
     // Create plate sprite with click event listener
     createPlateSprite({ x, y }, index) {
-        const plateSprite = new Sprite(this.crystals.plate);
+        const plateSprite = new Sprite(this.textures.plate);
         plateSprite.position.set(x, y);
         plateSprite.width = this.cellSize;
         plateSprite.height = this.cellSize;
@@ -125,7 +119,7 @@ export default class Grid {
 
     // Create crystal sprite and hide it initially
     createCrystalSprite({ x, y }, crystalType) {
-        const crystalSprite = new Sprite(this.crystals[crystalType]);
+        const crystalSprite = new Sprite(this.textures[crystalType]);
         crystalSprite.position.set(x, y);
         crystalSprite.width = this.cellSize;
         crystalSprite.height = this.cellSize;
@@ -143,8 +137,8 @@ export default class Grid {
         plateSprite.visible = false; // Hide plate
 
         // Update progress
-        this.progress[crystalType]++;
-        console.log(`${crystalType} Progress:`, this.progress[crystalType]);
+        this.game.progress[crystalType]++;
+        this.game.checkProgress();
     }
 
     // Удаление старых спрайтов с экрана
@@ -159,5 +153,10 @@ export default class Grid {
         });
         this.plateSprites = [];
         this.crystalSprites = [];
+    }
+
+    restart(){
+        this.crystalsArray = this.generateCrystalsArray(); // Generate crystal array on init
+        this.positions = this.calculatePositions();
     }
 }

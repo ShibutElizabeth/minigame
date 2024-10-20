@@ -6,6 +6,11 @@ import redAsset from '../static/red.png';
 import blueAsset from '../static/blue.png';
 import greenAsset from '../static/green.png';
 import purpleAsset from '../static/purple.png';
+import yellowMiniAsset from '../static/mini_yellow.png';
+import redMiniAsset from '../static/mini_red.png';
+import blueMiniAsset from '../static/mini_blue.png';
+import greenMiniAsset from '../static/mini_green.png';
+import purpleMiniAsset from '../static/mini_purple.png';
 import plateAsset from '../static/plate.png';
 import progressPurpleAsset from '../static/progress_purple.png';
 import progressGreenAsset from '../static/progress_green.png';
@@ -20,6 +25,7 @@ export default class Loader {
         this.progressBars = null;
         this.restartButton = null;
         this.background = null;
+        this.minicrystals = null;
     }
 
     /**
@@ -49,6 +55,37 @@ export default class Loader {
             };
 
             return this.crystals;
+        } catch (error) {
+            console.error('Error loading crystal assets:', error);
+            throw new Error('Failed to load crystal assets');
+        }
+    }
+
+    /**
+     * Load crystal textures for the game grid.
+     * @returns {Promise<Object>} A promise resolving to the crystal textures object.
+     */
+    async loadMiniCrystals() {
+        if (this.minicrystals) return this.minicrystals; // Если уже загружены
+
+        try {
+            const minicrystalTextures = await Promise.all([
+                Assets.load(yellowMiniAsset),
+                Assets.load(redMiniAsset),
+                Assets.load(blueMiniAsset),
+                Assets.load(greenMiniAsset),
+                Assets.load(purpleMiniAsset)
+            ]);
+
+            this.minicrystals = {
+                yellow: minicrystalTextures[0],
+                red: minicrystalTextures[1],
+                blue: minicrystalTextures[2],
+                green: minicrystalTextures[3],
+                purple: minicrystalTextures[4]
+            };
+
+            return this.minicrystals;
         } catch (error) {
             console.error('Error loading crystal assets:', error);
             throw new Error('Failed to load crystal assets');

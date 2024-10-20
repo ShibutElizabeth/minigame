@@ -1,7 +1,9 @@
 import { Application, Sprite } from 'pixi.js';
 import Loader from './Loader';
 import ProgressBars from './ProgressBars';
-import Grid from './Grid.class';
+import Grid from './Grid';
+import RestartButton from './Restart';
+import { crystalTypes } from "./constants";
 
 export default class Game {
     constructor() {
@@ -10,27 +12,62 @@ export default class Game {
         this.restartButtonTexture = null;
         this.loader = new Loader();
 
+        this.progress = {
+            yellow: 0,
+            red: 0,
+            blue: 0,
+            green: 0,
+            purple: 0,
+        };
         this.addCanvas();
         this.createBackground(); // Загружаем фон
-        
-        // this.setup();
+    }
+
+    // Initialize progress for each crystal type
+    initializeProgress() {
+        return crystalTypes.reduce((acc, type) => ({ ...acc, [type]: 0 }), {});
+    }
+
+    // Метод для проверки прогресса
+    checkProgress() {
+        this.progressBars.updateMiniCrystals(this.progress);
+        for (const key in this.progress) {
+            if (this.progress[key] >= 3) {
+                console.log(`Все ${key} кристаллы открыты! Перезапуск игры...`);
+                // this.restartGame();
+                break; // Прерываем цикл, если игра перезапускается
+            }
+        }
     }
 
     async setup() {
-        this.grid = new Grid(this.app);
+        this.grid = new Grid(this.app, this);
         this.progressBars = new ProgressBars(this.app);
+        this.restartButton = new RestartButton(this.app);
+
         // Загружаем текстуры кристаллов
         await Promise.all([
-            this.grid.loadCrystalTextures(),
-            this.progressBars.loadProgressBarsTextures(),
-            this.loadRestartButton()
+            this.grid.loadTextures(),
+            this.progressBars.loadTextures(),
+            this.restartButton.loadTexture()
         ]);
         
 
         // Размещаем ячейки на сцене только после загрузки текстур
         this.grid.placeCells();
-        this.progressBars.placeProgressBars();
-        this.placeRestartButton();
+        this.progressBars.place();
+        this.restartButton.place();
+
+        this.restartButton.sprite.on('pointerdown', () => {
+            this.restartGame(); // Сброс игры при нажатии
+        });
+    }
+
+    restartGame(){
+        this.initializeProgress();
+        this.grid.restart();
+        this.grid.placeCells();
+        // this.progressBars.reset();
     }
 
     async addCanvas() {
