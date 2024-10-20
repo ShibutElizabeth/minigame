@@ -42,6 +42,8 @@ export default class Game {
             if (this.progress[key] >= 3) {
                 console.log(`Все ${key} кристаллы открыты! Перезапуск игры...`);
                 // this.restartGame();
+                const winImg = document.querySelector('.popup__image');
+                winImg.style.backgroundImage = `url(../../${key}.png)`
                 this.popup.style.display = 'flex';
                 break; // Прерываем цикл, если игра перезапускается
             }

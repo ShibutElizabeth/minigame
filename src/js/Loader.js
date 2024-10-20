@@ -17,13 +17,11 @@ import progressGreenAsset from '../static/progress_green.png';
 import progressBlueAsset from '../static/progress_blue.png';
 import progressRedAsset from '../static/progress_red.png';
 import progressYellowAsset from '../static/progress_yellow.png';
-import restartButtonAsset from '../static/button_restart.png';
 
 export default class Loader {
     constructor() {
         this.crystals = null; // Кэшируем текстуры, чтобы загружать их один раз
         this.progressBars = null;
-        this.restartButton = null;
         this.background = null;
         this.minicrystals = null;
     }
@@ -135,24 +133,6 @@ export default class Loader {
             this.background = backgroundTexture;
 
             return this.background;
-        } catch (error) {
-            console.error('Error loading restart button: ', error);
-            throw new Error('Failed to load a restart button');
-        }
-    }
-
-    /**
-     * Load a restart button texture.
-     * @returns {Promise<Object>} A promise resolving to restart button texture.
-     */
-    async loadRestartButton() {
-        if (this.restartButton) return this.restartButton;
-
-        try {
-            const restartButtonTexture = await Assets.load(restartButtonAsset);
-            this.restartButton = restartButtonTexture;
-
-            return this.restartButton;
         } catch (error) {
             console.error('Error loading restart button: ', error);
             throw new Error('Failed to load a restart button');
