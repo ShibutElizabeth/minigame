@@ -64,10 +64,10 @@ export default class Game {
     }
 
     restartGame(){
-        this.initializeProgress();
+        this.progress = this.initializeProgress();
         this.grid.restart();
         this.grid.placeCells();
-        // this.progressBars.reset();
+        this.progressBars.restart(this.progress);
     }
 
     async addCanvas() {

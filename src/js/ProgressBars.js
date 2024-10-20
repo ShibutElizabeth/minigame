@@ -95,11 +95,15 @@ export default class ProgressBars {
     // Метод для обновления видимости миникристаллов
     updateMiniCrystals(progress) {
         this.minisprites.forEach((sprite, index) => {
-            const crystalType = crystalTypes[Math.floor(index / 3)]; // Определяем тип кристалла
-            const crystalProgress = progress[crystalType];
-
-            // Делаем миникристалл видимым, если прогресс >= позиции кристалла (например, для первого миникристалла прогресс >= 1)
-            sprite.visible = crystalProgress > (index % 3);
+            if(progress){
+                const crystalType = crystalTypes[Math.floor(index / 3)]; // Определяем тип кристалла
+                const crystalProgress = progress[crystalType];
+                // Делаем миникристалл видимым, если прогресс >= позиции кристалла (например, для первого миникристалла прогресс >= 1)
+                sprite.visible = crystalProgress > (index % 3);
+            } else {
+                sprite.visible = false;
+            }
+            
         });
     }
 
@@ -121,6 +125,6 @@ export default class ProgressBars {
     }
 
     restart(){
-
+        this.updateMiniCrystals();
     }
 }
