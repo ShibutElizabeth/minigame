@@ -26,7 +26,7 @@ export default class ProgressBars {
 
     // Рассчитываем отступы и размеры элементов
     calculateSizes(width) {
-        this.margin = { top: 0.012 * width, left: 0.117 * width };
+        this.margin = { top: 0.012 * width, left: 0.077 * width };
         this.barSize = { width: 0.154 * width, height: 0.0668 * width };
     }
 

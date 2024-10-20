@@ -19,6 +19,7 @@ export default class Loader {
         this.crystals = null; // Кэшируем текстуры, чтобы загружать их один раз
         this.progressBars = null;
         this.restartButton = null;
+        this.background = null;
     }
 
     /**
@@ -82,6 +83,24 @@ export default class Loader {
         } catch (error) {
             console.error('Error loading progress bars: ', error);
             throw new Error('Failed to load progress bars');
+        }
+    }
+
+    /**
+     * Load background texture.
+     * @returns {Promise<Object>} A promise resolving to background texture.
+     */
+    async loadBackground() {
+        if (this.background) return this.background;
+
+        try {
+            const backgroundTexture = await Assets.load(backgroundAsset);
+            this.background = backgroundTexture;
+
+            return this.background;
+        } catch (error) {
+            console.error('Error loading restart button: ', error);
+            throw new Error('Failed to load a restart button');
         }
     }
 

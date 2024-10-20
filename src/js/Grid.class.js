@@ -7,7 +7,10 @@ export default class Grid {
         this.app = app;
         this.columns = 5;
         this.rows = 3;
+        
+        console.log(this.app)
         this.width = this.app.screen.width;
+        
         this.calculateSizes(this.width);
         this.crystalsArray = this.generateCrystalsArray(); // Generate crystal array on init
         this.crystalSprites = [];
@@ -30,7 +33,7 @@ export default class Grid {
 
     // Calculate margin, padding, and cell sizes based on screen width
     calculateSizes(width) {
-        this.margin = { top: 0.0966 * width, left: 0.1675 * width };
+        this.margin = { top: 0.0866 * width, left: 0.1575 * width };
         this.padding = { top: 0.0282 * width, left: 0.044 * width };
         this.cellSize = 0.0974 * width;
     }
@@ -95,7 +98,7 @@ export default class Grid {
     // Place crystals and plates on the stage
     placeCells() {
         this.clearSprites();
-        
+
         this.positions.forEach((position, index) => {
             const plateSprite = this.createPlateSprite(position, index);
             const crystalSprite = this.createCrystalSprite(position, this.crystalsArray[index]);
