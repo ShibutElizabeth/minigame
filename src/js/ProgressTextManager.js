@@ -3,7 +3,6 @@ export default class ProgressTextManager {
         this.progressTexts = progressTexts;
     }
 
-    // Обновление текста прогресса
     updateProgress(key, value) {
         const inner = `Progress\n${value}/3`;
         if (this.progressTexts.has(key)) {
@@ -11,7 +10,6 @@ export default class ProgressTextManager {
         }
     }
 
-    // Сброс всех текстов
     resetProgress() {
         const inner = `Progress\n0/3`
         for (const [key, textElement] of this.progressTexts.entries()) {

@@ -28,7 +28,6 @@ export default class Grid {
         }
     }
 
-    // Генерация позиций для сетки 5x3 на основе отступов и промежутков
     generateData() {
         const data = [];
 
@@ -45,14 +44,12 @@ export default class Grid {
         return data;
     }
 
-    // Создание и перемешивание массива кристаллов (по 3 кристалла каждого типа)
     generateCrystalsArray() {
         const crystalsArray = crystalTypes.flatMap(type => Array(3).fill(type));
 
         return this.shuffleArray(crystalsArray);
     }
 
-    // Перемешивание массива по алгоритму Фишера-Йетса
     shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -62,7 +59,6 @@ export default class Grid {
         return array;
     }
 
-    // Создание спрайта плитки с обработчиком клика
     createPlateSprite({ x, y, size }, index) {
         const plateSprite = new Sprite(this.textures.plate);
         plateSprite.position.set(x, y);
@@ -70,45 +66,41 @@ export default class Grid {
         plateSprite.height = size;
         plateSprite.interactive = true;
         plateSprite.buttonMode = true;
-        plateSprite.on('pointerdown', (event) => this.openCrystal(event.global, index)); // Обработчик клика
+        plateSprite.on('pointerdown', (event) => this.openCrystal(event.global, index));
         
         return plateSprite;
     }
 
-    // Создание спрайта кристалла (изначально невидим)
     createCrystalSprite({ x, y, size }, crystalType) {
         const crystalSprite = new Sprite(this.textures[crystalType]);
         crystalSprite.position.set(x, y);
         crystalSprite.width = size;
         crystalSprite.height = size;
-        crystalSprite.visible = false; // Изначально скрыт
+        crystalSprite.visible = false;
         
         return crystalSprite;
     }
 
-    // Обработчик открытия кристалла по клику на плитку
     openCrystal(event, index) {
         const crystalType = this.crystalsArray[index];
         const crystalSprite = this.crystalSprites[index];
         const plateSprite = this.plateSprites[index];
 
-        crystalSprite.visible = true; // Показываем кристалл
-        plateSprite.visible = false; // Скрываем плитку
+        crystalSprite.visible = true;
+        plateSprite.visible = false;
 
         const mouse = { x: event.x, y: event.y };
         
-        // Обновляем прогресс
         this.game.progress[crystalType]++;
-        this.game.checkProgress(mouse); // Проверка обновленного прогресса
+        this.game.checkProgress(mouse);
     }
 
-    // Размещение кристаллов и плиток на сцене
     place() {
-        this.clear(); // Удаляем старые спрайты перед созданием новых
+        this.clear();
 
         this.data.forEach((info, index) => {
-            const plateSprite = this.createPlateSprite(info, index); // Создаем плитку
-            const crystalSprite = this.createCrystalSprite(info, this.crystalsArray[index]); // Создаем кристалл
+            const plateSprite = this.createPlateSprite(info, index);
+            const crystalSprite = this.createCrystalSprite(info, this.crystalsArray[index]);
 
             this.plateSprites.push(plateSprite);
             this.crystalSprites.push(crystalSprite);
@@ -124,14 +116,11 @@ export default class Grid {
         sprite.height = info.size;
     }
 
-    // Обработка изменения размеров экрана
     resize() {
         this.dimensionsManager.updateWidth(this.app.screen.width);
-        this.dimensions = this.dimensionsManager.calculateGridDimensions(); // Пересчитываем размеры ячеек и отступов
+        this.dimensions = this.dimensionsManager.calculateGridDimensions();
         
-        this.data = this.generateData(); // Пересчитываем позиции
-
-        // Обновляем позиции для всех плиток и кристаллов
+        this.data = this.generateData();
 
         for(let i = 0; i < this.plateSprites.length; i++){
             this.spriteResize(this.plateSprites[i], this.data[i])
@@ -139,13 +128,11 @@ export default class Grid {
         }
     }
 
-    // Перезапуск игры: обновляем массив кристаллов и позиции
     restart(){
-        this.crystalsArray = this.generateCrystalsArray(); // Генерация массива кристаллов
-        this.data = this.generateData(); // Рассчитываем позиции
+        this.crystalsArray = this.generateCrystalsArray();
+        this.data = this.generateData();
     }
 
-    // Очистка старых спрайтов с экрана
     clear() {
         [...this.plateSprites, ...this.crystalSprites].forEach((sprite) => {
             this.app.stage.removeChild(sprite);
