@@ -143,7 +143,7 @@ export default class Grid {
             x: event.x,
             y: event.y
         }
-        console.log(mouse)
+        
         // Update progress
         this.game.progress[crystalType]++;
         this.game.checkProgress(mouse);
