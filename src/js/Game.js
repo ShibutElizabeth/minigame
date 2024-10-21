@@ -15,6 +15,7 @@ export default class Game {
         this.popup = document.querySelector('.popup');
 
         this.backgroundTexture = null;
+        this.background = null;
 
         this.progress = {
             yellow: 0,
@@ -26,7 +27,6 @@ export default class Game {
         
         this.setupRestartButtons();
         this.addCanvas();
-        this.createBackground();
     }
 
     async addCanvas() {
@@ -34,21 +34,22 @@ export default class Game {
         document.body.appendChild(this.app.canvas);
         this.width = this.app.screen.width;
         this.height = this.app.screen.height;
+        await this.placeBackground();
         await this.setup();
     }
 
-    async createBackground() {
+    async placeBackground() {
         if (!this.backgroundTexture) {
             this.backgroundTexture = await this.loader.loadBackground();
         }
 
-        const background = new Sprite(this.backgroundTexture);
-        background.width = this.width;
-        background.height = this.height;
+        this.background = new Sprite(this.backgroundTexture);
+        this.background.width = this.width;
+        this.background.height = this.height;
+        this.background.anchor.set(0.5);
+        this.background.position.set(this.width/2, this.height/2);
 
-        this.app.stage.addChildAt(background, 0);
-
-        window.addEventListener('resize', () => this.resize(background));
+        this.app.stage.addChildAt(this.background, 0);
     }
 
     async setup() {
@@ -57,18 +58,29 @@ export default class Game {
         this.progressTexts = new ProgressTexts(this.app);
         this.progressTextManager = new ProgressTextManager(this.progressTexts.textsMap);
         
-        // Загружаем текстуры
         await Promise.all([
             this.grid.loadAssets(),
             this.progressBars.loadAssets()
         ]);
-        
         
         // Размещаем ячейки на сцене только после загрузки текстур
         this.grid.place();
         this.progressBars.place();
         this.progressTexts.place();
 
+        const preloader = document.querySelector('.preloader');
+        preloader.style.display = 'none';
+        
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            if (resizeTimeout) {
+                clearTimeout(resizeTimeout);
+            }
+            
+            resizeTimeout = setTimeout(() => {
+                this.resize(); 
+            }, 50);
+        });
     }
 
     initializeProgress() {
@@ -107,11 +119,18 @@ export default class Game {
         this.progressTextManager.resetProgress();
     }
 
-    // Метод для изменения размера фона
-    resize(background) {
-        background.width = this.app.screen.width;
-        background.height = this.app.screen.height;
+    resizeBackground(){
+        this.background.width = this.width;
+        this.background.height = this.height;
+        this.background.anchor.set(0.5);
+        this.background.position.set(this.width/2, this.height/2);
+    }
+
+    resize() {
         this.width = this.app.screen.width;
+        this.height = this.app.screen.height;
+
+        this.resizeBackground();
         this.grid.resize();
         this.progressBars.resize();
         this.progressTexts.resize();
