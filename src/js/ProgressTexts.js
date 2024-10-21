@@ -10,9 +10,15 @@ export default class ProgressTexts {
         this.positions = [];
         this.texts = new Map();
 
+        
+
+        window.addEventListener('resize', this.onResize.bind(this));
+    }
+
+    calculateSizes(width){
         this.style = new TextStyle({
             margin: 0,
-            fontSize: 0.014 * this.width,
+            fontSize: 0.014 * width,
             fill: '#fef9a9',
             letterSpacing: 0.6,
             stroke: '#000000',
@@ -20,9 +26,7 @@ export default class ProgressTexts {
             align: 'center',
             fontWeight: 500
         });
-    }
 
-    calculateSizes(width){
         this.margin = {
             left: 0.1756 * width,
             top: 0.035 * width
@@ -33,11 +37,9 @@ export default class ProgressTexts {
 
     generatePositions(){
         this.positions = [];
-        // const inner = 'Progress\n0/3';
         for(let col = 0; col < this.columns; col++){
-            // const text = new Text({text: inner.toUpperCase(), style: this.style});
             this.positions.push({
-                x: this.margin.left + col * (this.gap + 0.08 * this.width),
+                x: this.margin.left + col * (this.gap + 0.079 * this.width),
                 y: this.margin.top
             });
         }
@@ -45,10 +47,6 @@ export default class ProgressTexts {
 
     place(){
         const inner = 'Progress\n0/3';
-        // const text = new Text({text: inner.toUpperCase(), style: this.style});
-        // text.x = 200;
-        // text.y = 50;
-        // this.app.stage.addChild(text);
         this.positions.forEach((pos, i) => {
             const text = new Text({ text: inner.toUpperCase(), style: this.style });
             text.x = pos.x;

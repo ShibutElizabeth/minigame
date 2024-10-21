@@ -49,7 +49,7 @@ export default class Game {
         this.progressBars.updateMiniCrystals(this.progress, mouse);
     
         for (const key in this.progress) {
-            // this.progressTextManager.updateProgress(key, this.progress[key]);
+            this.progressTextManager.updateProgress(key, this.progress[key]);
     
             if (this.progress[key] >= 3) {
                 console.log(`Все ${key} кристаллы открыты! Перезапуск игры...`);
@@ -65,7 +65,7 @@ export default class Game {
         this.grid = new Grid(this.app, this);
         this.progressBars = new ProgressBars(this.app);
         this.progressTexts = new ProgressTexts(this.app);
-
+        this.progressTextManager = new ProgressTextManager(this.progressTexts.texts);
         // Загружаем текстуры кристаллов
         await Promise.all([
             this.grid.loadTextures(),
@@ -87,7 +87,7 @@ export default class Game {
         this.grid.restart();
         this.grid.placeCells();
         this.progressBars.restart(this.progress);
-        // this.progressTextManager.resetProgress();
+        this.progressTextManager.resetProgress();
     }
 
     async addCanvas() {
