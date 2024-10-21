@@ -1,4 +1,5 @@
 import { Sprite } from 'pixi.js';
+import gsap from 'gsap';
 import LoaderManager from './managers/LoaderManager';
 import DimensionsManager from './managers/DimensionsManager';
 import { crystalTypes, SIZES } from "../constants";
@@ -66,6 +67,7 @@ export default class Grid {
         plateSprite.height = size;
         plateSprite.interactive = true;
         plateSprite.buttonMode = true;
+        plateSprite.alpha = 1.0;
         plateSprite.on('pointerdown', (event) => this.openCrystal(event.global, index));
         
         return plateSprite;
@@ -76,7 +78,7 @@ export default class Grid {
         crystalSprite.position.set(x, y);
         crystalSprite.width = size;
         crystalSprite.height = size;
-        crystalSprite.visible = false;
+        // crystalSprite.visible = false;
         
         return crystalSprite;
     }
@@ -86,8 +88,7 @@ export default class Grid {
         const crystalSprite = this.crystalSprites[index];
         const plateSprite = this.plateSprites[index];
 
-        crystalSprite.visible = true;
-        plateSprite.visible = false;
+        this.animateSprite(plateSprite, crystalSprite)
 
         const mouse = { x: event.x, y: event.y };
         
@@ -95,18 +96,29 @@ export default class Grid {
         this.game.checkProgress(mouse);
     }
 
+    animateSprite(plateSprite, crystalSprite){
+        gsap.to(plateSprite, {
+            duration: 0.5, 
+            alpha: 0,
+            onComplete: () => {
+                plateSprite.visible = false;
+                crystalSprite.visible = true;
+            }
+        });
+    }
+
     place() {
         this.clear();
 
         this.data.forEach((info, index) => {
-            const plateSprite = this.createPlateSprite(info, index);
             const crystalSprite = this.createCrystalSprite(info, this.crystalsArray[index]);
+            const plateSprite = this.createPlateSprite(info, index);
 
-            this.plateSprites.push(plateSprite);
             this.crystalSprites.push(crystalSprite);
-
-            this.app.stage.addChild(plateSprite);
+            this.plateSprites.push(plateSprite);
+            
             this.app.stage.addChild(crystalSprite);
+            this.app.stage.addChild(plateSprite); 
         });
     }
     
