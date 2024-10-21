@@ -2,6 +2,7 @@ import { Application, Sprite } from 'pixi.js';
 import Loader from './Loader';
 import ProgressBars from './ProgressBars';
 import Grid from './Grid';
+import ProgressTextManager from './ProgressTextManager';
 import { crystalTypes } from "./constants";
 
 export default class Game {
@@ -17,7 +18,14 @@ export default class Game {
             green: 0,
             purple: 0,
         };
-        this.restartButtons = document.querySelectorAll('.restart_button');
+        this.progressTextManager = new ProgressTextManager(new Map([
+            ['yellow', document.querySelector('.js-progress-yellow')],
+            ['red', document.querySelector('.js-progress-red')],
+            ['blue', document.querySelector('.js-progress-blue')],
+            ['green', document.querySelector('.js-progress-green')],
+            ['purple', document.querySelector('.js-progress-purple')]
+        ]));
+        this.restartButtons = document.querySelectorAll('.restart-button');
         this.popup = document.querySelector('.popup');
         this.setupRestartButtons();
         this.addCanvas();
@@ -37,13 +45,15 @@ export default class Game {
 
     // Метод для проверки прогресса
     checkProgress(mouse) {
-        console.log(mouse)
         this.progressBars.updateMiniCrystals(this.progress, mouse);
+    
         for (const key in this.progress) {
+            this.progressTextManager.updateProgress(key, this.progress[key]);
+    
             if (this.progress[key] >= 3) {
                 console.log(`Все ${key} кристаллы открыты! Перезапуск игры...`);
                 const winImg = document.querySelector('.popup__image');
-                winImg.style.backgroundImage = `url(../../${key}.png)`
+                winImg.style.backgroundImage = `url(../../${key}.png)`;
                 this.popup.style.display = 'flex';
                 break; // Прерываем цикл, если игра перезапускается
             }
@@ -73,6 +83,7 @@ export default class Game {
         this.grid.restart();
         this.grid.placeCells();
         this.progressBars.restart(this.progress);
+        this.progressTextManager.resetProgress();
     }
 
     async addCanvas() {
