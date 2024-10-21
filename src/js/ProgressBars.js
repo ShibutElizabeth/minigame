@@ -99,7 +99,7 @@ export default class ProgressBars {
             if(progress){
                 const crystalType = crystalTypes[Math.floor(index / 3)]; // Определяем тип кристалла
                 const crystalProgress = progress[crystalType];
-                if(crystalProgress > (index % 3)){
+                if (!sprite.visible && crystalProgress > (index % 3)){
                     // Вычисляем целевую позицию миникристалла в прогресс-баре
                     const targetX = this.positions[index].x;
                     const targetY = this.positions[index].y;
@@ -132,15 +132,15 @@ export default class ProgressBars {
         miniCrystal.width = this.miniSize.width;
         miniCrystal.height = this.miniSize.height;
 
-        console.log('animate')
         // Добавляем миникристалл на сцену
         this.app.stage.addChild(miniCrystal);
 
         // Анимация перемещения от позиции клика до позиции в прогресс-баре
-        gsap.to(miniCrystal, {
+        gsap.timeline().to(miniCrystal, {
             x: targetX,
             y: targetY,
-            duration: 1, // Длительность анимации в секундах
+            duration: 0.5, // Длительность анимации в секундах
+            ease: 'power1.inOut', // Более естественное ускорение
             onComplete: () => {
                 // Удаляем миникристалл после завершения анимации
                 this.app.stage.removeChild(miniCrystal);
