@@ -15,7 +15,7 @@ export default class ProgressTextManager {
     resetProgress() {
         const inner = `Progress\n0/3`
         for (const [key, textElement] of this.progressTexts.entries()) {
-            textElement.text = inner;
+            textElement.text = inner.toUpperCase();
         }
     }
 }
