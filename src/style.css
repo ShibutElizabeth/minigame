@@ -59,7 +59,7 @@ canvas{
     max-width: 8vw;
 }
 
-.popup{
+.popup {
     position: fixed;
     display: none;
     flex-wrap: nowrap;

@@ -3,6 +3,7 @@ import Loader from './Loader';
 import ProgressBars from './ProgressBars';
 import Grid from './Grid';
 import ProgressTextManager from './ProgressTextManager';
+import ProgressTexts from './ProgressTexts';
 import { crystalTypes } from "./constants";
 
 export default class Game {
@@ -18,13 +19,13 @@ export default class Game {
             green: 0,
             purple: 0,
         };
-        this.progressTextManager = new ProgressTextManager(new Map([
-            ['yellow', document.querySelector('.js-progress-yellow')],
-            ['red', document.querySelector('.js-progress-red')],
-            ['blue', document.querySelector('.js-progress-blue')],
-            ['green', document.querySelector('.js-progress-green')],
-            ['purple', document.querySelector('.js-progress-purple')]
-        ]));
+        // this.progressTextManager = new ProgressTextManager(new Map([
+        //     ['yellow', document.querySelector('.js-progress-yellow')],
+        //     ['red', document.querySelector('.js-progress-red')],
+        //     ['blue', document.querySelector('.js-progress-blue')],
+        //     ['green', document.querySelector('.js-progress-green')],
+        //     ['purple', document.querySelector('.js-progress-purple')]
+        // ]));
         this.restartButtons = document.querySelectorAll('.restart-button');
         this.popup = document.querySelector('.popup');
         this.setupRestartButtons();
@@ -48,7 +49,7 @@ export default class Game {
         this.progressBars.updateMiniCrystals(this.progress, mouse);
     
         for (const key in this.progress) {
-            this.progressTextManager.updateProgress(key, this.progress[key]);
+            // this.progressTextManager.updateProgress(key, this.progress[key]);
     
             if (this.progress[key] >= 3) {
                 console.log(`Все ${key} кристаллы открыты! Перезапуск игры...`);
@@ -63,6 +64,7 @@ export default class Game {
     async setup() {
         this.grid = new Grid(this.app, this);
         this.progressBars = new ProgressBars(this.app);
+        this.progressTexts = new ProgressTexts(this.app);
 
         // Загружаем текстуры кристаллов
         await Promise.all([
@@ -70,10 +72,12 @@ export default class Game {
             this.progressBars.loadTextures()
         ]);
         
-
+        
         // Размещаем ячейки на сцене только после загрузки текстур
         this.grid.placeCells();
         this.progressBars.place();
+        this.progressTexts.restart();
+        this.progressTexts.place();
 
     }
 
@@ -83,7 +87,7 @@ export default class Game {
         this.grid.restart();
         this.grid.placeCells();
         this.progressBars.restart(this.progress);
-        this.progressTextManager.resetProgress();
+        // this.progressTextManager.resetProgress();
     }
 
     async addCanvas() {
