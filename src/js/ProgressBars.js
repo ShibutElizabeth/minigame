@@ -65,12 +65,12 @@ export default class ProgressBars {
             this.sprites.push(barSprite);
             this.app.stage.addChild(barSprite);
         }
+
         this.placeMinicrystals();
     }
 
     placeMinicrystals(){
-        
-
+        this.positions = [];
         for(let type = 0; type < this.columns; type++){
             for(let c = 0; c < 3; c++){
                 this.positions.push({
@@ -94,27 +94,67 @@ export default class ProgressBars {
     }
 
     // Метод для обновления видимости миникристаллов
-    updateMiniCrystals(progress, mouse) {
+    // updateAnimatedMiniCrystals(progress, mouse) {
+    //     this.minisprites.forEach((sprite, index) => {
+    //         if(progress){
+    //             const crystalType = crystalTypes[Math.floor(index / 3)]; // Определяем тип кристалла
+    //             const crystalProgress = progress[crystalType];
+    //             if (!sprite.visible && crystalProgress > (index % 3)){
+    //                 // Вычисляем целевую позицию миникристалла в прогресс-баре
+    //                 const targetX = this.positions[index].x;
+    //                 const targetY = this.positions[index].y;
+                    
+    //                 // Запускаем анимацию
+    //                 this.animateMiniCrystal(mouse.x, mouse.y, targetX, targetY, crystalType);
+    //             }
+                
+    //             // Делаем миникристалл видимым, если прогресс >= позиции кристалла (например, для первого миникристалла прогресс >= 1)
+    //             // sprite.visible = crystalProgress > (index % 3);
+    //         } else {
+    //             sprite.visible = false;
+    //         }
+    //     });
+    // }
+    
+    // updateMiniCrystals(progress) {
+    //     this.minisprites.forEach((sprite, index) => {
+    //         if(progress){
+    //             const crystalType = crystalTypes[Math.floor(index / 3)]; // Определяем тип кристалла
+    //             const crystalProgress = progress[crystalType];                
+    //             // Делаем миникристалл видимым, если прогресс >= позиции кристалла (например, для первого миникристалла прогресс >= 1)
+    //             sprite.visible = crystalProgress > (index % 3);
+    //         } else {
+    //             sprite.visible = false;
+    //         }
+    //     });
+    // }
+
+    // Метод для обновления и анимации миникристаллов
+    updateMiniCrystals(progress, mouse = null) {
         this.minisprites.forEach((sprite, index) => {
-            if(progress){
+            if (progress) {
                 const crystalType = crystalTypes[Math.floor(index / 3)]; // Определяем тип кристалла
                 const crystalProgress = progress[crystalType];
-                if (!sprite.visible && crystalProgress > (index % 3)){
-                    // Вычисляем целевую позицию миникристалла в прогресс-баре
-                    const targetX = this.positions[index].x;
-                    const targetY = this.positions[index].y;
-                    
-                    // Запускаем анимацию
-                    this.animateMiniCrystal(mouse.x, mouse.y, targetX, targetY, crystalType);
+
+                // Если прогресс больше, чем позиция текущего миникристалла, и он еще не видим
+                if (!sprite.visible && crystalProgress > (index % 3)) {
+                    // Если переданы координаты клика, запускаем анимацию
+                    if (mouse) {
+                        const targetX = this.positions[index].x;
+                        const targetY = this.positions[index].y;
+                        this.animateMiniCrystal(mouse.x, mouse.y, targetX, targetY, crystalType);
+                    } else {
+                        // Если нет анимации, просто делаем видимым
+                        sprite.visible = true;
+                    }
                 }
-                
-                // Делаем миникристалл видимым, если прогресс >= позиции кристалла (например, для первого миникристалла прогресс >= 1)
-                // sprite.visible = crystalProgress > (index % 3);
             } else {
+                // Если прогресса нет, скрываем кристалл
                 sprite.visible = false;
             }
         });
     }
+
 
     clearSprites() {
         // Удаляем старые спрайты прогресс-баров и миникристаллов
