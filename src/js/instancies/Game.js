@@ -1,18 +1,18 @@
 import { Application, Sprite } from 'pixi.js';
-import Loader from './Loader';
+import LoaderManager from './managers/LoaderManager';
 import ProgressBars from './ProgressBars';
 import Grid from './Grid';
-import ProgressTextManager from './ProgressTextManager';
+import ProgressTextManager from './managers/ProgressTextManager';
 import ProgressTexts from './ProgressTexts';
-import { crystalTypes } from "./constants";
+import { crystalTypes } from "../constants";
 
 export default class Game {
     constructor() {
         this.app = new Application();
-        this.loader = new Loader();
+        this.loaderManager = new LoaderManager();
 
-        this.restartButtons = document.querySelectorAll('.restart-button');
-        this.popup = document.querySelector('.popup');
+        this.restartButtons = document.querySelectorAll('.js-restart-button');
+        this.popup = document.querySelector('.js-popup');
 
         this.backgroundTexture = null;
         this.background = null;
@@ -40,7 +40,7 @@ export default class Game {
 
     async placeBackground() {
         if (!this.backgroundTexture) {
-            this.backgroundTexture = await this.loader.loadBackground();
+            this.backgroundTexture = await this.loaderManager.loadBackground();
         }
 
         this.background = new Sprite(this.backgroundTexture);
@@ -67,7 +67,7 @@ export default class Game {
         this.progressBars.place();
         this.progressTexts.place();
 
-        const preloader = document.querySelector('.preloader');
+        const preloader = document.querySelector('.js-preloader');
         preloader.style.display = 'none';
         
         let resizeTimeout;
@@ -94,8 +94,8 @@ export default class Game {
     
             if (this.progress[key] >= 3) {
                 console.log(`All ${key} crystalls are open! Restarting...`);
-                const winImg = document.querySelector('.popup__image');
-                winImg.style.backgroundImage = `url(../../${key}.png)`;
+                const winImg = document.querySelector('.js-win-image');
+                winImg.style.backgroundImage = `url(../../../${key}.png)`;
                 this.popup.style.display = 'flex';
                 break;
             }

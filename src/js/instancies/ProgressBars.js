@@ -1,8 +1,8 @@
 import { Sprite } from 'pixi.js';
 import gsap from 'gsap';
-import Loader from './Loader';
-import { crystalTypes, SIZES } from './constants';
-import DimensionsManager from './DimensionsManager';
+import LoaderManager from './managers/LoaderManager';
+import { crystalTypes, SIZES } from '../constants';
+import DimensionsManager from './managers/DimensionsManager';
 
 export default class ProgressBars {
     constructor(app) {
@@ -12,7 +12,7 @@ export default class ProgressBars {
         this.barDimensions = this.dimensionsManager.calculateProgressBarsDimensions();
         this.miniDimensions = this.dimensionsManager.calculateMiniCrystalsDimensions();
 
-        this.loader = new Loader();
+        this.loaderManager = new LoaderManager();
         this.barTextures = null;
         this.miniTextures = null;
 
@@ -28,10 +28,10 @@ export default class ProgressBars {
 
     async loadAssets() {
         if (!this.barTextures) {
-            this.barTextures = await this.loader.loadProgressBars();
+            this.barTextures = await this.loaderManager.loadProgressBars();
         }
         if (!this.miniTextures) {
-            this.miniTextures = await this.loader.loadMiniCrystals();
+            this.miniTextures = await this.loaderManager.loadMiniCrystals();
         }
     }
 

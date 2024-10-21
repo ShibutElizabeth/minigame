@@ -20,7 +20,6 @@ canvas{
     width: 14.7vw;
     height: 5.64vw;
     cursor: pointer;
-    /* display: none; */
 
     &:hover{
         filter: brightness(1.2);

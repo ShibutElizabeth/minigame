@@ -4,14 +4,15 @@
         <meta charset="UTF-8">
         <title>MINI GAME</title>
         <link rel="stylesheet" href="./style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div class="popup">
+        <div class="popup js-popup">
             <h1 class="popup__text text">WIN</h1>
-            <div class="popup__image"></div>
-            <img class="popup__button restart-button" src="./static/button_restart.png" alt="restart-button"/>
+            <div class="popup__image js-win-image"></div>
+            <img class="popup__button restart-button js-restart-button" src="./static/button_restart.png" alt="restart-button"/>
         </div>
-        <div id="preloader" class="preloader">
+        <div class="preloader js-preloader">
             <div class="spinner">
                 <div class="circle circle1"></div>
                 <div class="circle circle2"></div>
@@ -19,7 +20,7 @@
             </div>
             <div class="text">Loading...</div>
         </div>
-        <img class="restart-button" src="./static/button_restart.png" alt="restart-button"/>
+        <img class="restart-button js-restart-button" src="./static/button_restart.png" alt="restart-button"/>
         <script type="module" src="../src/js/app.js"></script>
 	</body>
 </html>

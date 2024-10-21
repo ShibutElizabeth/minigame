@@ -1,6 +1,6 @@
 import { Text, TextStyle } from 'pixi.js';
-import DimensionsManager from './DimensionsManager';
-import { crystalTypes, SIZES } from "./constants";
+import DimensionsManager from './managers/DimensionsManager';
+import { crystalTypes, SIZES } from "../constants";
 
 export default class ProgressTexts {
     constructor(app){

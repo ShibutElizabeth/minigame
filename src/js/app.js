@@ -1,4 +1,4 @@
-import Game from "./Game";
+import Game from './instancies/Game';
 
-console.log("hello!");
+console.log('hello!');
 new Game();

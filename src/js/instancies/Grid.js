@@ -1,7 +1,7 @@
 import { Sprite } from 'pixi.js';
-import Loader from './Loader';
-import DimensionsManager from './DimensionsManager';
-import { crystalTypes, SIZES } from "./constants";
+import LoaderManager from './managers/LoaderManager';
+import DimensionsManager from './managers/DimensionsManager';
+import { crystalTypes, SIZES } from "../constants";
 
 export default class Grid {
     constructor(app, game) {
@@ -11,7 +11,7 @@ export default class Grid {
         this.dimensionsManager = new DimensionsManager(this.app.screen.width);
         this.dimensions = this.dimensionsManager.calculateGridDimensions();
 
-        this.loader = new Loader();
+        this.loaderManager = new LoaderManager();
         this.textures = null;
         
         this.crystalsArray = [];
@@ -24,7 +24,7 @@ export default class Grid {
 
     async loadAssets() {
         if(!this.textures){
-            this.textures = await this.loader.loadCrystals();
+            this.textures = await this.loaderManager.loadCrystals();
         }
     }
 
