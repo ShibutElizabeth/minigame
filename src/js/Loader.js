@@ -20,18 +20,14 @@ import progressYellowAsset from '../static/progress_yellow.png';
 
 export default class Loader {
     constructor() {
-        this.crystals = null; // Кэшируем текстуры, чтобы загружать их один раз
+        this.crystals = null;
         this.progressBars = null;
         this.background = null;
         this.minicrystals = null;
     }
 
-    /**
-     * Load crystal textures for the game grid.
-     * @returns {Promise<Object>} A promise resolving to the crystal textures object.
-     */
     async loadCrystals() {
-        if (this.crystals) return this.crystals; // Если уже загружены
+        if (this.crystals) return this.crystals;
 
         try {
             const crystalTextures = await Promise.all([
@@ -59,12 +55,8 @@ export default class Loader {
         }
     }
 
-    /**
-     * Load crystal textures for the game grid.
-     * @returns {Promise<Object>} A promise resolving to the crystal textures object.
-     */
     async loadMiniCrystals() {
-        if (this.minicrystals) return this.minicrystals; // Если уже загружены
+        if (this.minicrystals) return this.minicrystals;
 
         try {
             const minicrystalTextures = await Promise.all([
@@ -85,15 +77,11 @@ export default class Loader {
 
             return this.minicrystals;
         } catch (error) {
-            console.error('Error loading crystal assets:', error);
-            throw new Error('Failed to load crystal assets');
+            console.error('Error loading minicrystal assets:', error);
+            throw new Error('Failed to load minicrystal assets');
         }
     }
 
-    /**
-     * Load progress bars textures.
-     * @returns {Promise<Object>} A promise resolving to progress bars textures.
-     */
     async loadProgressBars() {
         if (this.progressBars) return this.progressBars;
 
@@ -121,10 +109,6 @@ export default class Loader {
         }
     }
 
-    /**
-     * Load background texture.
-     * @returns {Promise<Object>} A promise resolving to background texture.
-     */
     async loadBackground() {
         if (this.background) return this.background;
 
@@ -134,8 +118,8 @@ export default class Loader {
 
             return this.background;
         } catch (error) {
-            console.error('Error loading restart button: ', error);
-            throw new Error('Failed to load a restart button');
+            console.error('Error loading background: ', error);
+            throw new Error('Failed to load background');
         }
     }
 }

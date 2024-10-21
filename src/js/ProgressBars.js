@@ -26,7 +26,6 @@ export default class ProgressBars {
         this.restart();
     }
 
-    // Загрузка текстур
     async loadAssets() {
         if (!this.barTextures) {
             this.barTextures = await this.loader.loadProgressBars();
@@ -69,7 +68,6 @@ export default class ProgressBars {
         return data;
     }
 
-    // Обновление и анимация мини-кристаллов
     updateMiniCrystals(progress, mouse = null) {
         this.miniSprites.forEach((mini, index) => {
             if (progress) {
@@ -90,7 +88,6 @@ export default class ProgressBars {
         });
     }
 
-    // Анимация мини-кристаллов
     animateMiniCrystal(startX, startY, targetX, targetY, type, index) {
         if (this.animationIndices.has(index)) return;
         
@@ -118,9 +115,8 @@ export default class ProgressBars {
         });
     }
 
-    // Размещение прогресс-баров
     place() {
-        this.clear(); // Очищаем старые спрайты
+        this.clear();
 
         this.barsData.forEach((info, index) => {
             const bar = new Sprite(this.barTextures[crystalTypes[index]]);
@@ -135,7 +131,6 @@ export default class ProgressBars {
         this.placeMiniCrystals();
     }
 
-    // Размещение мини-кристаллов
     placeMiniCrystals() {
         this.miniData.forEach((info) => {
             const mini = new Sprite(this.miniTextures[crystalTypes[info.type]]);
@@ -156,7 +151,6 @@ export default class ProgressBars {
         sprite.height = info.height;
     }
 
-    // Перерасчет и перемещение элементов при изменении размера окна
     resize() {
         this.dimensionsManager.updateWidth(this.app.screen.width);
         this.barDimensions = this.dimensionsManager.calculateProgressBarsDimensions();
@@ -173,7 +167,6 @@ export default class ProgressBars {
         });
     }
 
-    // Перезапуск прогресса
     restart() {
         this.barsData = this.generateBarsData();
         this.miniData = this.generateMiniData();
@@ -181,7 +174,6 @@ export default class ProgressBars {
         this.updateMiniCrystals();
     }
 
-    // Очистка старых спрайтов
     clear() {
         [...this.barSprites, ...this.miniSprites].forEach((sprite) => {
             this.app.stage.removeChild(sprite);

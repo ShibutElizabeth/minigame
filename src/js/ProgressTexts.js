@@ -45,10 +45,9 @@ export default class ProgressTexts {
         });
     }
 
-    // Пересчитываем позиции и размеры на изменение окна
     resize() {
         this.dimensionsManager.updateWidth(this.app.screen.width);
-        this.dimensions = this.dimensionsManager.calculateProgressTextDimensions(); // Пересчитываем размеры
+        this.dimensions = this.dimensionsManager.calculateProgressTextDimensions();
         
         this.data = this.generateData();
         
@@ -64,7 +63,6 @@ export default class ProgressTexts {
     }
 
     clear() {
-        // Удаляем старые спрайты прогресс-баров и миникристаллов
         this.textSprites.forEach((sprite) => {
             this.app.stage.removeChild(child);
             sprite.destroy();

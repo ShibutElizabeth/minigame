@@ -63,7 +63,6 @@ export default class Game {
             this.progressBars.loadAssets()
         ]);
         
-        // Размещаем ячейки на сцене только после загрузки текстур
         this.grid.place();
         this.progressBars.place();
         this.progressTexts.place();
@@ -87,7 +86,6 @@ export default class Game {
         return crystalTypes.reduce((acc, type) => ({ ...acc, [type]: 0 }), {});
     }
 
-    // Метод для проверки прогресса
     checkProgress(mouse) {
         this.progressBars.updateMiniCrystals(this.progress, mouse);
     
