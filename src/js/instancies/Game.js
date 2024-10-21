@@ -1,9 +1,10 @@
 import { Application, Sprite } from 'pixi.js';
-import LoaderManager from './managers/LoaderManager';
+
 import ProgressBars from './ProgressBars';
 import Grid from './Grid';
-import ProgressTextManager from './managers/ProgressTextManager';
 import ProgressTexts from './ProgressTexts';
+import LoaderManager from './managers/LoaderManager';
+import ProgressTextManager from './managers/ProgressTextManager';
 import { crystalTypes, paths } from "../constants";
 
 export default class Game {

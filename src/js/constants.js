@@ -16,7 +16,6 @@ import progressBlueAsset from '../static/progress_blue.png';
 import progressRedAsset from '../static/progress_red.png';
 import progressYellowAsset from '../static/progress_yellow.png';
 
-
 export const crystalTypes = ['purple', 'green', 'blue', 'red', 'yellow'];
 
 export const SIZES = {

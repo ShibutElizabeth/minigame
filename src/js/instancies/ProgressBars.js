@@ -1,8 +1,9 @@
 import { Sprite } from 'pixi.js';
 import gsap from 'gsap';
+
 import LoaderManager from './managers/LoaderManager';
-import { crystalTypes, SIZES } from '../constants';
 import DimensionsManager from './managers/DimensionsManager';
+import { crystalTypes, SIZES } from '../constants';
 
 export default class ProgressBars {
     constructor(app) {

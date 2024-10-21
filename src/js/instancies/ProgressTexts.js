@@ -1,4 +1,5 @@
 import { Text, TextStyle } from 'pixi.js';
+
 import DimensionsManager from './managers/DimensionsManager';
 import { crystalTypes, SIZES } from "../constants";
 
