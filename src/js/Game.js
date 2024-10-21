@@ -87,7 +87,7 @@ export default class Game {
     }
 
     async addCanvas() {
-        await this.app.init({ background: '#1099bb', resizeTo: window });
+        await this.app.init({ transparent: true, resizeTo: window });
         document.body.appendChild(this.app.canvas);
         this.width = this.app.screen.width;
         this.height = this.app.screen.height;
