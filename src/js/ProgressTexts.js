@@ -1,81 +1,76 @@
 import { Text, TextStyle } from 'pixi.js';
-import { crystalTypes } from "./constants";
+import DimensionsManager from './DimensionsManager';
+import { crystalTypes, SIZES } from "./constants";
 
 export default class ProgressTexts {
     constructor(app){
         this.app = app;
-        this.width = this.app.screen.width;
-        this.columns = 5;
-
-        this.positions = [];
-        this.texts = new Map();
-
         
+        this.dimensionsManager = new DimensionsManager(this.app.screen.width);
+        this.dimensions = this.dimensionsManager.calculateProgressTextDimensions();
 
-        window.addEventListener('resize', this.onResize.bind(this));
+        this.data = [];
+        this.textsMap = new Map();
+        this.textSprites = [];
+
+        this.restart();
     }
 
-    calculateSizes(width){
-        this.style = new TextStyle({
-            margin: 0,
-            fontSize: 0.014 * width,
-            fill: '#fef9a9',
-            letterSpacing: 0.6,
-            stroke: '#000000',
-            // strokeThickness: 1,
-            align: 'center',
-            fontWeight: 500
-        });
+    generateData(){
+        const data = [];
 
-        this.margin = {
-            left: 0.1756 * width,
-            top: 0.035 * width
-        };
-
-        this.gap = 0.0745 * width;
-    }
-
-    generatePositions(){
-        this.positions = [];
-        for(let col = 0; col < this.columns; col++){
-            this.positions.push({
-                x: this.margin.left + col * (this.gap + 0.079 * this.width),
-                y: this.margin.top
+        for(let col = 0; col < SIZES.COLUMNS; col++){
+            data.push({
+                x: this.dimensions.margin.left + col * this.dimensions.gap,
+                y: this.dimensions.margin.top,
+                style: new TextStyle(this.dimensions.style)
             });
         }
+
+        return data;
     }
 
     place(){
+        this.clear();
+
         const inner = 'Progress\n0/3';
-        this.positions.forEach((pos, i) => {
-            const text = new Text({ text: inner.toUpperCase(), style: this.style });
-            text.x = pos.x;
-            text.y = pos.y;
-            console.log(text)
-            this.texts.set(crystalTypes[i], text);
+        this.data.forEach((info, index) => {
+            const text = new Text({ text: inner.toUpperCase(), style: info.style });
+            text.x = info.x;
+            text.y = info.y;
+            this.textSprites.push(text);
+            this.textsMap.set(crystalTypes[index], text);
+            
             this.app.stage.addChild(text);
-        })
+        });
+    }
+
+    // Пересчитываем позиции и размеры на изменение окна
+    resize() {
+        this.dimensionsManager.updateWidth(this.app.screen.width);
+        this.dimensions = this.dimensionsManager.calculateProgressTextDimensions(); // Пересчитываем размеры
+        
+        this.data = this.generateData();
+        
+        this.textSprites.forEach((textSprite, index) => {
+            const info = this.data[index];
+            textSprite.position.set(info.x, info.y);
+            textSprite.style.fontSize = info.style.fontSize;
+        });
+    }
+
+    restart(){
+        this.data = this.generateData();
     }
 
     clear() {
         // Удаляем старые спрайты прогресс-баров и миникристаллов
-        this.texts.forEach((child) => this.app.stage.removeChild(child))
-        this.positions = [];
-        this.texts.clear();
-    }
+        this.textSprites.forEach((sprite) => {
+            this.app.stage.removeChild(child);
+            sprite.destroy();
+        })
 
-    // Пересчитываем позиции и размеры на изменение окна
-    onResize() {
-        this.clear();
-        this.width = this.app.screen.width;
-        this.calculateSizes(this.width); // Пересчитываем размеры
-        this.generatePositions();
-        // Перерасполагаем прогресс-бары после ресайза
-        this.place();
-    }
-
-    restart(){
-        this.calculateSizes(this.width);
-        this.generatePositions();
+        this.textSprites = [];
+        this.textsMap.clear();
     }
 }
