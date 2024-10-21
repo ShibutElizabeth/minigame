@@ -32,6 +32,7 @@ canvas{
 .popup{
     position: fixed;
     display: none;
+    flex-wrap: nowrap;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -43,9 +44,17 @@ canvas{
 }
 
 .popup__text{
-    color: yellow;
+    /* color: yellow; */
     font-size: 50px;
     margin: 0;
+    /* font-size: 36px; */
+    font-size: 6.41vw;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #fef9a9;
+    font-weight: 500;
+    font-family: "Ubuntu";
+    text-align: center;
 }
 
 .popup__image{
