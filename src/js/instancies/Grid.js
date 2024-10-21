@@ -78,7 +78,6 @@ export default class Grid {
         crystalSprite.position.set(x, y);
         crystalSprite.width = size;
         crystalSprite.height = size;
-        // crystalSprite.visible = false;
         
         return crystalSprite;
     }

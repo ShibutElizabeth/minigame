@@ -7,7 +7,6 @@ export default class DimensionsManager {
         this.width = newWidth;
     }
 
-    // Общие методы для расчета отступов, размеров, ячеек и т.д.
     calculateGridDimensions() {
         return {
             margin: { top: 0.0956 * this.width, left: 0.169 * this.width },

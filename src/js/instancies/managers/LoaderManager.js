@@ -1,22 +1,5 @@
 import { Assets } from 'pixi.js';
-
-import backgroundAsset from '../../../static/bg.png';
-import yellowAsset from '../../../static/yellow.png';
-import redAsset from '../../../static/red.png';
-import blueAsset from '../../../static/blue.png';
-import greenAsset from '../../../static/green.png';
-import purpleAsset from '../../../static/purple.png';
-import yellowMiniAsset from '../../../static/mini_yellow.png';
-import redMiniAsset from '../../../static/mini_red.png';
-import blueMiniAsset from '../../../static/mini_blue.png';
-import greenMiniAsset from '../../../static/mini_green.png';
-import purpleMiniAsset from '../../../static/mini_purple.png';
-import plateAsset from '../../../static/plate.png';
-import progressPurpleAsset from '../../../static/progress_purple.png';
-import progressGreenAsset from '../../../static/progress_green.png';
-import progressBlueAsset from '../../../static/progress_blue.png';
-import progressRedAsset from '../../../static/progress_red.png';
-import progressYellowAsset from '../../../static/progress_yellow.png';
+import { paths } from '../../constants';
 
 export default class LoaderManager {
     constructor() {
@@ -31,12 +14,12 @@ export default class LoaderManager {
 
         try {
             const crystalTextures = await Promise.all([
-                Assets.load(yellowAsset),
-                Assets.load(redAsset),
-                Assets.load(blueAsset),
-                Assets.load(greenAsset),
-                Assets.load(purpleAsset),
-                Assets.load(plateAsset)
+                Assets.load(paths.yellow),
+                Assets.load(paths.red),
+                Assets.load(paths.blue),
+                Assets.load(paths.green),
+                Assets.load(paths.purple),
+                Assets.load(paths.plate)
             ]);
 
             this.crystals = {
@@ -60,11 +43,11 @@ export default class LoaderManager {
 
         try {
             const minicrystalTextures = await Promise.all([
-                Assets.load(yellowMiniAsset),
-                Assets.load(redMiniAsset),
-                Assets.load(blueMiniAsset),
-                Assets.load(greenMiniAsset),
-                Assets.load(purpleMiniAsset)
+                Assets.load(paths.yellowMini),
+                Assets.load(paths.redMini),
+                Assets.load(paths.blueMini),
+                Assets.load(paths.greenMini),
+                Assets.load(paths.purpleMini)
             ]);
 
             this.minicrystals = {
@@ -87,19 +70,19 @@ export default class LoaderManager {
 
         try {
             const progressBarTextures = await Promise.all([
-                Assets.load(progressPurpleAsset),
-                Assets.load(progressGreenAsset),
-                Assets.load(progressBlueAsset),
-                Assets.load(progressRedAsset),
-                Assets.load(progressYellowAsset)
+                Assets.load(paths.progressYellow),
+                Assets.load(paths.progressRed),
+                Assets.load(paths.progressBlue),
+                Assets.load(paths.progressGreen),
+                Assets.load(paths.progressPurple)
             ]);
 
             this.progressBars = {
-                purple: progressBarTextures[0],
-                green: progressBarTextures[1],
+                yellow: progressBarTextures[0],
+                red: progressBarTextures[1],
                 blue: progressBarTextures[2],
-                red: progressBarTextures[3],
-                yellow: progressBarTextures[4]
+                green: progressBarTextures[3],
+                purple: progressBarTextures[4]
             };
 
             return this.progressBars;
@@ -113,7 +96,7 @@ export default class LoaderManager {
         if (this.background) return this.background;
 
         try {
-            const backgroundTexture = await Assets.load(backgroundAsset);
+            const backgroundTexture = await Assets.load(paths.background);
             this.background = backgroundTexture;
 
             return this.background;

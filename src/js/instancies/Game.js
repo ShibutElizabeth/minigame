@@ -4,7 +4,7 @@ import ProgressBars from './ProgressBars';
 import Grid from './Grid';
 import ProgressTextManager from './managers/ProgressTextManager';
 import ProgressTexts from './ProgressTexts';
-import { crystalTypes } from "../constants";
+import { crystalTypes, paths } from "../constants";
 
 export default class Game {
     constructor() {
@@ -95,7 +95,7 @@ export default class Game {
             if (this.progress[key] >= 3) {
                 console.log(`All ${key} crystalls are open! Restarting...`);
                 const winImg = document.querySelector('.js-win-image');
-                winImg.style.backgroundImage = `url(../../../${key}.png)`;
+                winImg.style.backgroundImage = `url(${paths[key]})`;  
                 this.popup.style.display = 'flex';
                 break;
             }
